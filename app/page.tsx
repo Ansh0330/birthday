@@ -4,6 +4,8 @@ import GallerySection from '../components/GallerySection'
 import VideosSection from '@/components/VideosSection'
 import LoveLetterSection from '@/components/LetterSection'
 import DomeSection from '@/components/DomeSection'
+import ReasonsSection from '@/components/ReasonsSection'
+import Footer from '@/components/Footer'
 
 const page = () => {
   return (
@@ -13,6 +15,8 @@ const page = () => {
       <VideosSection/>
       <LoveLetterSection/>
       <DomeSection/>
+      <ReasonsSection/>
+      <Footer/>
     </div>
   )
 }
