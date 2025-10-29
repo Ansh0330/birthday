@@ -30,7 +30,7 @@ const images = [
 
 const GallerySection = () => {
   return (
-    <section className="py-24 bg-gradient-to-br from-white via-pink-100 to-rose-50">
+    <section className="mt-20 py-34 bg-gradient-to-br from-white via-pink-100 to-rose-50">
       <div className="text-center mb-12">
         <h2 className="font-[Great_Vibes] text-5xl text-pink-700">
           Our Beautiful Memories
