@@ -44,9 +44,9 @@ export default function VideoMessageSection() {
             <video
               controls
               className="w-full h-full object-cover"
-              poster="/path-to-your-thumbnail.jpg" // Optional: Add a beautiful thumbnail
+              poster="https://ik.imagekit.io/ansh3003/dome/Beige%20Blue%20Minimalist%20Aesthetic%20Photo%20Collage%20Beach%20Desktop%20Wallpaper.png?updatedAt=1761748993614" // Optional: Add a beautiful thumbnail
             >
-              <source src="https://github.com/Ansh0330/birthday/releases/download/v1.0/bg.mp4" type="video/mp4" />
+              <source src="https://github.com/Ansh0330/birthday/releases/download/v1.0/1029.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
