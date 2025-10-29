@@ -194,7 +194,7 @@ export default function ReasonsFlipCards() {
           >
             <Heart className="w-7 h-7 text-pink-500 fill-pink-500 mr-2" />
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
-              100 Reasons Why I Love You
+              Some Reasons Why I Love You
             </h2>
             <Heart className="w-7 h-7 text-pink-500 fill-pink-500 ml-2" />
           </motion.div>
