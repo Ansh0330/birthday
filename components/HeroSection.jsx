@@ -98,7 +98,7 @@ const HeroSection = () => {
       </motion.div>
 
       {/* Background Audio */}
-      <audio ref={audioRef} src="/bg.mp3" loop preload="auto" />
+      <audio ref={audioRef} src="/bg2.mp3" loop preload="auto" />
     </div>
   );
 };
