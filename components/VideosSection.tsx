@@ -17,12 +17,11 @@ const videoList = [
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/20.oct.mp4", caption: "Pure sunshine ☀️" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/21.oct.mp4", caption: "Heart goes boom 💓" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/22.Oct.mp4", caption: "Soft moments only 🌿" },
-  { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/23.oct.mp4", caption: "You’re my calm 💗" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/24.oct.mp4", caption: "You make life glow ✨" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/25.oct.mp4", caption: "My fav human 💞" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/26.oct.mp4", caption: "Still falling for you 🌹" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/27.oct.mp4", caption: "Endless crush 💘" },
-  { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/28th.oct.mp4", caption: "Always, you 💖" },
+  { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/28th.oct.mp4", caption: "You’re my calm 💗" },
   { src: "https://github.com/Ansh0330/birthday/releases/download/v1.0/29.oct.mp4", caption: "Always, you 💖" },
 ];
 
