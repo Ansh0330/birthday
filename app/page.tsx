@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { CardScroll } from "@/components/CardScroll";
 import { TextScroll } from "@/components/TextScroll";
 import { TextScroll2 } from "@/components/TextScroll2";
+import VideoMessageSection from "@/components/VideoMessageSection";
 
 const page = () => {
   return (
@@ -22,6 +23,7 @@ const page = () => {
       <VideosSection />
       <LoveLetterSection />
       <DomeSection />
+      <VideoMessageSection/>
       <ReasonsSection />
       <TextScroll2 />
       <Footer />

@@ -1,7 +1,8 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { Heart, RefreshCw } from "lucide-react";
+
 
 const reasons = [
   "Your smile makes my world brighter. 😊✨",
@@ -48,7 +49,7 @@ const reasons = [
   "You make the nights feel less lonely. 🌙✨",
   "You inspire me to be a better person. 🌟💓",
   "Your love is my greatest strength. 💖🛡️",
-  "You don’t need words to make me feel loved. 🤍💫",
+  "You don't need words to make me feel loved. 🤍💫",
   "You make my dreams sweeter. 🍬💞",
   "Every song reminds me of you. 🎵❤️",
   "Your love is my safe haven. 🏡💛",
@@ -65,7 +66,7 @@ const reasons = [
   "You make distance feel smaller. 🌍💓",
   "Your love is louder than any fear. 📢💖",
   "You are my constant in an uncertain world. 🌌💛",
-  "You believe in me when I don’t. 🌟💞",
+  "You believe in me when I don't. 🌟💞",
   "Your love makes my heart race. 💓🏃‍♂️",
   "You make pain feel temporary. ⏳💖",
   "You hold my heart gently. 💖🤲",
@@ -97,169 +98,202 @@ const reasons = [
   "Your love is my strongest prayer. 🙏❤️",
   "You make me believe in soulmates. 💞🌌",
   "The way you make me crave more of you. 😘💖",
-  "You are my heart’s favorite place. ❤️🏡",
+  "You are my heart's favorite place. ❤️🏡",
   "You make love feel effortless. 🌸💛",
   "You always keep it real. 🫂💖",
   "Your love is my quiet miracle. ✨💞",
   "You make every second with you precious. ⏰❤️",
   "You are the love story I always wanted. 📖💖",
-  "I love you because you are you. 💛🌟"
+  "I love you because you are you. 💛🌟",
 ];
 
 
-export default function ReasonsCarousel() {
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+export default function ReasonsFlipCards() {
+  const [currentReasons, setCurrentReasons] = useState<string[]>([]);
+  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+  const [usedReasons, setUsedReasons] = useState<Set<string>>(new Set());
 
-  const delay = 5000; // 5 seconds auto slide
 
-  function resetTimeout() {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  // Get 12 random unique reasons
+  const getRandomReasons = () => {
+    const availableReasons = reasons.filter((r) => !usedReasons.has(r));
+
+
+    // If all reasons used, reset
+    if (availableReasons.length < 12) {
+      setUsedReasons(new Set());
+      return shuffleArray([...reasons]).slice(0, 12);
     }
-  }
 
+
+    const selected = shuffleArray(availableReasons).slice(0, 12);
+    setUsedReasons((prev) => new Set([...prev, ...selected]));
+    return selected;
+  };
+
+
+  // Shuffle array helper
+  const shuffleArray = (array: string[]) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+
+  // Initialize on mount
   useEffect(() => {
-    resetTimeout();
-    timeoutRef.current = setTimeout(() => {
-      setDirection(1);
-      setCurrent((prevIndex) =>
-        prevIndex === reasons.length - 1 ? 0 : prevIndex + 1
-      );
-    }, delay);
+    setCurrentReasons(getRandomReasons());
+  }, []);
 
-    return () => {
-      resetTimeout();
-    };
-  }, [current]);
 
-  const prevReason = () => {
-    setDirection(-1);
-    setCurrent(current === 0 ? reasons.length - 1 : current - 1);
+  // Handle card flip
+  const handleFlip = (index: number) => {
+    setFlippedCards((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
   };
 
-  const nextReason = () => {
-    setDirection(1);
-    setCurrent(current === reasons.length - 1 ? 0 : current + 1);
+
+  // Handle refresh
+  const handleRefresh = () => {
+    setFlippedCards(new Set());
+    setCurrentReasons(getRandomReasons());
   };
 
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-  };
+
+  // Auto-refresh when all cards flipped
+  useEffect(() => {
+    if (flippedCards.size === 12 && currentReasons.length === 12) {
+      const timer = setTimeout(() => {
+        handleRefresh();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [flippedCards.size]);
+
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50 py-16 px-4 mt-20">
-      <div className="max-w-4xl w-full">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50 py-16 px-4">
+      <div className="max-w-5xl w-full">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="inline-flex items-center justify-center mb-4"
           >
-            <Heart className="w-8 h-8 text-pink-500 fill-pink-500 mr-2" />
-            <h2 className="text-5xl md:text-5xl font-bold bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
-              100 Reasons , Why I Love You
+            <Heart className="w-7 h-7 text-pink-500 fill-pink-500 mr-2" />
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
+              100 Reasons Why I Love You
             </h2>
-            <Heart className="w-8 h-8 text-pink-500 fill-pink-500 ml-2" />
+            <Heart className="w-7 h-7 text-pink-500 fill-pink-500 ml-2" />
           </motion.div>
-          <p className="text-pink-600 text-lg font-light">
-            Every reason, a piece of my heart
+          <p className="text-pink-600 text-base md:text-lg font-light mb-4">
+            Click each card to reveal a reason
           </p>
+
+
+          {/* Refresh Button */}
+          <button
+            onClick={handleRefresh}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-pink-400 to-fuchsia-400 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-sm md:text-base"
+          >
+            <RefreshCw className="w-4 h-4 md:w-5 md:h-5" />
+            <span className="font-medium">New Reasons</span>
+          </button>
         </div>
 
-        {/* Carousel Container */}
-        <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-12 md:p-16 border border-pink-100">
-          {/* Decorative elements */}
-          <div className="absolute top-0 left-0 w-32 h-32 bg-pink-200/30 rounded-full blur-3xl -z-10" />
-          <div className="absolute bottom-0 right-0 w-40 h-40 bg-fuchsia-200/30 rounded-full blur-3xl -z-10" />
 
-          {/* Reason Display */}
-          <div className="relative h-48 md:h-40 flex items-center justify-center overflow-hidden">
-            <AnimatePresence initial={false} custom={direction}>
+        {/* Cards Grid */}
+        <div className="relative max-w-4xl mx-auto">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+            {currentReasons.map((reason, index) => (
               <motion.div
-                key={current}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 },
-                }}
-                className="absolute w-full text-center"
+                key={`${reason}-${index}`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                className="perspective-1000"
               >
-                <p className="text-2xl md:text-3xl font-medium text-gray-800 leading-relaxed px-4">
-                  {reasons[current]}
-                </p>
+                <div
+                  onClick={() => handleFlip(index)}
+                  className={`relative w-full aspect-square cursor-pointer transition-transform duration-700 transform-style-3d ${
+                    flippedCards.has(index) ? "rotate-y-180" : ""
+                  }`}
+                  style={{
+                    transformStyle: "preserve-3d",
+                    transform: flippedCards.has(index)
+                      ? "rotateY(180deg)"
+                      : "rotateY(0deg)",
+                  }}
+                >
+                  {/* Front of card */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br from-pink-400 to-fuchsia-400 rounded-xl md:rounded-2xl shadow-lg flex items-center justify-center backface-hidden"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    <Heart className="w-8 h-8 md:w-10 md:h-10 text-white fill-white opacity-50" />
+                  </div>
+
+
+                  {/* Back of card */}
+                  <div
+                    className="absolute inset-0 bg-white rounded-xl md:rounded-2xl shadow-lg p-2 md:p-3 flex items-center justify-center backface-hidden"
+                    style={{
+                      backfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)",
+                    }}
+                  >
+                    <p className="text-xs md:text-sm text-gray-800 text-center leading-tight md:leading-relaxed">
+                      {reason}
+                    </p>
+                  </div>
+                </div>
               </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="flex items-center justify-center gap-8 mt-12">
-            <button
-              onClick={prevReason}
-              className="group relative p-4 bg-gradient-to-br from-pink-400 to-fuchsia-400 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-              aria-label="Previous reason"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-
-            <div className="flex flex-col items-center">
-              <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 to-fuchsia-500 bg-clip-text text-transparent">
-                {current + 1}
-              </span>
-              <span className="text-sm text-pink-400 font-medium">
-                of {reasons.length}
-              </span>
-            </div>
-
-            <button
-              onClick={nextReason}
-              className="group relative p-4 bg-gradient-to-br from-pink-400 to-fuchsia-400 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-              aria-label="Next reason"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
-            </button>
-          </div>
-
-          {/* Progress Dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {reasons.slice(0, Math.min(reasons.length, 10)).map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  idx === current % 10
-                    ? "w-8 bg-gradient-to-r from-pink-400 to-fuchsia-400"
-                    : "w-2 bg-pink-200"
-                }`}
-              />
             ))}
           </div>
 
+
           {/* "And infinite more..." line */}
-          <div className="absolute bottom-6 right-8 text-pink-400 text-lg italic font-medium">
+          <div className="absolute -bottom-10 right-2 md:right-4 text-pink-400 text-base md:text-lg italic font-medium">
             and infinite more...
           </div>
         </div>
+
+
+        {/* Progress indicator */}
+        <div className="text-center mt-14">
+          <p className="text-pink-500 font-medium text-sm md:text-base">
+            {flippedCards.size} / 12 reasons revealed
+          </p>
+        </div>
       </div>
+
+
+      <style jsx>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .transform-style-3d {
+          transform-style: preserve-3d;
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </section>
   );
 }
