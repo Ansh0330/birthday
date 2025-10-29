@@ -51,7 +51,7 @@ export const TextScroll = () => {
             key={index}
             char={char}
             index={index}
-            centerIndex={5}
+            centerIndex={11}
             scrollYProgress={scrollYProgress}
           />
         ))}
